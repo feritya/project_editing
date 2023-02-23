@@ -74,6 +74,8 @@ ACCOUNT_UNIQUE_EMAIL = True
 AUTH_USER_MODEL = 'profiller.CustomUser'
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 
+SITE_ID =1
+
 REST_AUTH = {
     'LOGIN_SERIALIZER': 'dj_rest_auth.serializers.LoginSerializer',
     'TOKEN_SERIALIZER': 'dj_rest_auth.serializers.TokenSerializer',
