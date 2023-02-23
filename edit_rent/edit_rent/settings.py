@@ -38,23 +38,25 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'django.contrib.sites',
     'rest_framework.authtoken',
-    
+    'profiller',
+  
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'dj_rest_auth'
-    'django.contrib.sites',
+    'dj_rest_auth',
+
     'dj_rest_auth.registration',
 ]
-p
+
 AUTHENTICATION_BACKENDS = [
     
     # Needed to login by username in Django admin, regardless of `allauth`
     'django.contrib.auth.backends.ModelBackend',
 
     # `allauth` specific authentication methods, such as login by e-mail
-    'allauth.account.auth_backends.AuthenticationBackend',p
+    'allauth.account.auth_backends.AuthenticationBackend'
     
 ]
 REST_FRAMEWORK = {
@@ -62,6 +64,15 @@ REST_FRAMEWORK = {
         'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
     )
 }
+
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+
+
+AUTH_USER_MODEL = 'profiller.CustomUser'
+ACCOUNT_EMAIL_VERIFICATION = 'none'
 
 REST_AUTH = {
     'LOGIN_SERIALIZER': 'dj_rest_auth.serializers.LoginSerializer',
@@ -73,9 +84,7 @@ REST_AUTH = {
     'PASSWORD_RESET_SERIALIZER': 'dj_rest_auth.serializers.PasswordResetSerializer',
     'PASSWORD_RESET_CONFIRM_SERIALIZER': 'dj_rest_auth.serializers.PasswordResetConfirmSerializer',
     'PASSWORD_CHANGE_SERIALIZER': 'dj_rest_auth.serializers.PasswordChangeSerializer',
-
-    'REGISTER_SERIALIZER': 'dj_rest_auth.registration.serializers.RegisterSerializer',
-
+    'REGISTER_SERIALIZER': 'profiller.serializers.CustomRegisterSerializer',
     'REGISTER_PERMISSION_CLASSES': ('rest_framework.permissions.AllowAny',),
 
     'TOKEN_MODEL': 'rest_framework.authtoken.models.Token',
