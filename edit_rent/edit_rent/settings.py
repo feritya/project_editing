@@ -37,11 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'rest_framework',
     'django.contrib.sites',
     'rest_framework.authtoken',
     'profiller',
-  
+    'api',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -64,15 +65,18 @@ REST_FRAMEWORK = {
         'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
     )
 }
+REST_USE_JWT = True
+JWT_AUTH_COOKIE = 'my-app-auth'
 
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_UNIQUE_EMAIL = True
-
+ACCOUNT_UNIQUE_EMAIL = True 
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 
 AUTH_USER_MODEL = 'profiller.CustomUser'
-ACCOUNT_EMAIL_VERIFICATION = 'none'
+
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
 SITE_ID =1
 
@@ -189,3 +193,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'sitarem1345@gmail.com'
+EMAIL_HOST_PASSWORD = 'Y.ferit13'
+EMAIL_PORT = 587

@@ -1,3 +1,10 @@
 from django.contrib import admin
+from .models import (Car,
+                                CarReservation,
+                                Favorite
+                                )
+                                
+admin.site.register(CarReservation)
+admin.site.register(Car)
 
-# Register your models here.
+admin.site.register(Favorite)
