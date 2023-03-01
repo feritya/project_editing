@@ -15,12 +15,12 @@ from rest_framework.decorators import action
 
 from api.models import (Car,
 CarReservation,
-Favorite
+CarFavorite
 )
 from api.car.serializers import (CarSerializers,
 CarReservationSerializer,
 CarPastReservationSerializer,
-FavoriteSerializer
+CarFavoriteSerializer
 )
 
 
@@ -63,18 +63,16 @@ class CarPastRezervationsAPIView(viewsets.ModelViewSet) :
     serializer_class=         CarPastReservationSerializer
     queryset =                  CarReservation.objects.all()
 
-class FavoriteViewSet(viewsets.ModelViewSet):
-    queryset = Favorite.objects.all()
-    serializer_class = FavoriteSerializer
+class CarFavoriteViewSet(viewsets.ModelViewSet):
+    queryset = CarFavorite.objects.all()
+    serializer_class = CarFavoriteSerializer
 
 
 
 
 
 
-
-
-    """
+"""
     queryset = Car.objects.all()
     serializer_class = CarSerializers
 

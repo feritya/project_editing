@@ -1,7 +1,7 @@
 from api.models import (
 Car,
 CarReservation,
-Favorite
+CarFavorite
 )
 from rest_framework import serializers
 from PIL import Image
@@ -26,9 +26,9 @@ class CarPastReservationSerializer(serializers.ModelSerializer):
         model   = CarReservation
         fields     = ('id','car_model','car_rent_per_day','car_arac_foto_1','total_price','rez_date')
 
-class FavoriteSerializer(serializers.ModelSerializer):
+class CarFavoriteSerializer(serializers.ModelSerializer):
     class Meta:
-        model   = Favorite
+        model   = CarFavorite
         fields     =  '__all__'
 
 

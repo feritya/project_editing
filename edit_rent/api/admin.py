@@ -7,4 +7,4 @@ from .models import (Car,
 admin.site.register(CarReservation)
 admin.site.register(Car)
 
-admin.site.register(Favorite)
+# admin.site.register(CarFavorite)

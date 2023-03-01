@@ -25,4 +25,6 @@ urlpatterns = [
     path('dj-rest-auth/', include('dj_rest_auth.urls')),
     path('dj-rest-auth/registration/', include('dj_rest_auth.registration.urls')),
     path('api/',include('api.car.urls')),
+    path('api/',include('api.motor.urls')),
+    # path('api/',include('api.bike.urls')),
 ]

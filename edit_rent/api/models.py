@@ -4,7 +4,8 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.core.validators import MaxValueValidator, MinValueValidator
 from profiller.models import CustomUser
 from PIL import Image
-
+class Favorite():
+    pass
 
 class Car(models.Model):
     car_owner             = models.ForeignKey(CustomUser, on_delete=models.CASCADE,related_name = 'car' )
@@ -35,7 +36,7 @@ class CarReservation(models.Model):
         return str(self.customer) + "- " + str(self.car)
 
 
-class Favorite(models.Model):
+class CarFavorite(models.Model):
     user                    = models.ForeignKey( CustomUser, on_delete=models.CASCADE)
     # content_type      = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     # object_id            = models.PositiveIntegerField()
@@ -48,19 +49,51 @@ def __str__(self):
 
 
 
-# class Moto(models.Model):
-#     moto_owner             = models.ForeignKey(CustomUser, on_delete=models.CASCADE,related_name = 'car' )
-#     # vehicle_number    = models.CharField(max_length=20)
-#     moto_location          = models.CharField(max_length=20,null=False)
-#     model                   = models.CharField(max_length=50)
-#     seating_capacity   =models.PositiveIntegerField(default=2)
-#     rent_per_day         = models.PositiveIntegerField( default=100,validators=[MinValueValidator(50)])
-#     availability             = models.BooleanField(null=True)
-#     about                    = models.TextField(max_length=355,null=True, blank=True)
-#     moto_foto_1           = models.ImageField(null=True,blank=True,upload_to='motor_fotolari/%Y/%m/')
-#     moto_foto_2           = models.ImageField(null=True,blank=True,upload_to='motor_fotolari/%Y/%m/')
-#     moto_foto_3           = models.ImageField(null=True,blank=True,upload_to='motor_fotolari/%Y/%m/')
+class Moto(models.Model):
+    moto_owner             = models.ForeignKey(CustomUser, on_delete=models.CASCADE,related_name = 'moto' )
+    # vehicle_number    = models.CharField(max_length=20)
+    moto_location          = models.CharField(max_length=20,null=False)
+    model                   = models.CharField(max_length=50)
+    seating_capacity   =models.PositiveIntegerField(default=2)
+    rent_per_day         = models.PositiveIntegerField( default=100,validators=[MinValueValidator(50)])
+    availability             = models.BooleanField(null=True)
+    about                    = models.TextField(max_length=355,null=True, blank=True)
+    moto_foto_1           = models.ImageField(null=True,blank=True,upload_to='motor_fotolari/%Y/%m/')
+    moto_foto_2           = models.ImageField(null=True,blank=True,upload_to='motor_fotolari/%Y/%m/')
+    moto_foto_3           = models.ImageField(null=True,blank=True,upload_to='motor_fotolari/%Y/%m/')
 
-#     def __str__(self):
+    def __str__(self):
 
-#             return self.model
+            return self.model
+
+class MotoReservation(models.Model):
+    customer        = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    motor             = models.ForeignKey(Moto, on_delete=models.CASCADE)
+    issue_date      = models.DateField()
+    return_date    = models.DateField()
+    rez_date         = models.DateField(auto_now_add=True)
+    total_price      = models.IntegerField()
+    
+    def __str__(self):
+        return str(self.customer) + "- " + str(self.motor)
+
+class MotoFavorite(models.Model):
+    user                    = models.ForeignKey( CustomUser, on_delete=models.CASCADE)
+    # content_type      = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    # object_id            = models.PositiveIntegerField()
+    # content_object   = GenericForeignKey('content_type', 'object_id')
+    motor = models.ManyToManyField('api.moto', related_name='favori_set_moto')
+    
+def __str__(self):
+        return self.motor
+
+
+
+
+
+
+
+
+
+
+

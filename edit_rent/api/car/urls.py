@@ -2,7 +2,7 @@ from django.urls import path, include
 
 from rest_framework.routers import DefaultRouter
 from rest_framework import routers
-from api.car.views import CarAPIView,CarReservationsAPIView,CarPastRezervationsAPIView,FavoriteViewSet
+from api.car.views import CarAPIView,CarReservationsAPIView,CarPastRezervationsAPIView,CarFavoriteViewSet
 
 
 router = routers.DefaultRouter()   
@@ -10,7 +10,7 @@ router = routers.DefaultRouter()
 router.register(r'car', CarAPIView),
 router.register(r'car_reservations',CarReservationsAPIView),
 router.register(r'car_past_reservations',CarPastRezervationsAPIView),
-router.register(r'favorites', FavoriteViewSet),
+router.register(r'favorites', CarFavoriteViewSet),
 urlpatterns = [
     path('',include(router.urls)),
 ]
