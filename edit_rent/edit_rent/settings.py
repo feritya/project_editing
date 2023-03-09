@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    'django_filters',
     'rest_framework',
     'django.contrib.sites',
     'rest_framework.authtoken',
@@ -63,8 +63,15 @@ AUTHENTICATION_BACKENDS = [
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
-    )
+    ),
+     'DEFAULT_FILTER_BACKENDS': [
+    'django_filters.rest_framework.DjangoFilterBackend',
+    'rest_framework.filters.SearchFilter', # SearchFilter'ı ekliyoruz
+    'rest_framework.filters.OrderingFilter',
+     
+     ]
 }
+
 REST_USE_JWT = True
 JWT_AUTH_COOKIE = 'my-app-auth'
 

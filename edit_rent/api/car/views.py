@@ -12,33 +12,77 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 
 from rest_framework.decorators import action
+from rest_framework.filters import SearchFilter
+from django_filters.rest_framework import DjangoFilterBackend,OrderingFilter
 
-from api.models import (Car,
-CarReservation,
-CarFavorite
+from api.models import (
+Vehicle,
+Reservation,
+Favorite
 )
-from api.car.serializers import (CarSerializers,
-CarReservationSerializer,
-CarPastReservationSerializer,
-CarFavoriteSerializer
+from api.car.serializers import (
+VehicleReservationSerializer,
+VehicleSerializers,
+VehiclePastReservationSerializer,
+FavoriteSerializer,
 )
+from rest_framework import filters
+from django_filters import rest_framework as django_filters
+
+class VehicleFilter(django_filters.FilterSet):
+    min_rent_per_day = django_filters.NumberFilter(field_name='rent_per_day', lookup_expr='gte')
+    max_rent_per_day = django_filters.NumberFilter(field_name='rent_per_day', lookup_expr='lte')
+    min_seating_capacity = django_filters.NumberFilter(field_name='seating_capacity', lookup_expr='gte')
+    max_seating_capacity = django_filters.NumberFilter(field_name='seating_capacity', lookup_expr='lte')
+
+class VehicleSearchAPIView(viewsets.ModelViewSet) :
+    serializer_class  =VehicleSerializers
+    queryset =Vehicle.objects.all()
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['availability', 'rent_per_day','seating_capacity','vehicle_location','model','category']
+    
 
 
 
 
-class CarAPIView(viewsets.ModelViewSet) :
+class VehicleAPIView(viewsets.ModelViewSet) :
     # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    serializer_class=         CarSerializers
-    queryset =                  Car.objects.all()
-class CarReservationsAPIView(viewsets.ModelViewSet):
-     queryset = CarReservation.objects.all()
-     serializer_class = CarReservationSerializer
+    serializer_class  =VehicleSerializers
+    queryset =Vehicle.objects.all()
+    filterset_class = VehicleFilter
+    filter_backends = [django_filters.DjangoFilterBackend, filters.OrderingFilter]
+    ordering_fields = ['rent_per_day', 'seating_capacity']
+    
+    def get_queryset(self):
+        queryset =Vehicle.objects.all()
+        model     = self.request.query_params.get('model',None)
+        category = self.request.query_params.get('category',None)
+        vehicle_location  = self.request.query_params.get('vehicle_location',None)
+        
+  
+
+        if vehicle_location is not None:
+            queryset=queryset.filter(vehicle_location=vehicle_location)
+
+        if category is not None:
+            queryset=queryset.filter(category=category)
+
+        if model is not None:
+            queryset=queryset.filter(model=model)
+
+        return queryset
+
+
+class VehicleReservationsAPIView(viewsets.ModelViewSet):
+     queryset           = Reservation.objects.all()
+     serializer_class  = VehicleReservationSerializer
+
      # permission_classes = [IsAccountAdminOrReadOnly]
     
      def create(self, request):
          serializer = self.get_serializer(data=request.data)
          serializer.is_valid(raise_exception=True)
-         reservations = CarReservation.objects.filter(car=serializer.data['car'])
+         reservations = Reservation.objects.filter(vehicle=serializer.data['vehicle'])
          issue_date = serializer.data['issue_date']
          return_date = serializer.data['return_date']
          current_date = date.today()
@@ -55,75 +99,28 @@ class CarReservationsAPIView(viewsets.ModelViewSet):
              headers = self.get_success_headers(serializer.data)
              return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
          else:
-             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class CarPastRezervationsAPIView(viewsets.ModelViewSet) :
+class VehiclePastRezervationsAPIView(viewsets.ModelViewSet) :
     # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    serializer_class=         CarPastReservationSerializer
-    queryset =                  CarReservation.objects.all()
+    serializer_class  =VehiclePastReservationSerializer
+    queryset           =Reservation.objects.all()
+    filter_backends = [DjangoFilterBackend]
 
-class CarFavoriteViewSet(viewsets.ModelViewSet):
-    queryset = CarFavorite.objects.all()
-    serializer_class = CarFavoriteSerializer
-
-
-
-
-
-
-"""
-    queryset = Car.objects.all()
-    serializer_class = CarSerializers
-
-    @action(detail=True, methods=['POST'])
-    def add_to_favorites(self, request, pk=None):
-        car = self.get_object()
-        user = request.user
-        user.favorite_vehicles.add(car)
-        return Response({'message': 'Vehicle added to favorites!'})
-
-    @action(detail=True, methods=['POST'])
-    def remove_from_favorites(self, request, pk=None):
-        car = self.get_object()
-        user = request.user
-        user.favorite_vehicles.remove(car)
-        return Response({'message': 'Vehicle removed from favorites!'})
-
-"""
+#araba modeline göre rezervasyonları getirir
+    def get_queryset(self):
+        queryset =Reservation.objects.all()
+        vehicle     = self.request.query_params.get('vehicle',None)
+        if vehicle is not None:
+            queryset=queryset.filter(vehicle__model=vehicle)
+        return queryset
 
 
-
-
-"""
-class FavoriteViewSet(viewsets.ModelViewSet):
-    queryset                    = Favorite.objects.all()
-    serializer_class           = FavoriteSerializer
-    def perform_create(self, serializer):
-
-
-        content_type = get_object_or_404(ContentType, model=self.request.data.get('content_type'))
-        object_id = int(self.request.data.get('object_id'))
-        serializer.save(user=self.request.user, content_type=content_type, object_id=object_id)
-        
-"""
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#favoriler clasını oluşturuyorum 
+class FavoriteAPIView(viewsets.ModelViewSet) :
+     queryset           = Favorite.objects.all()
+     serializer_class  = FavoriteSerializer
 
 
 
