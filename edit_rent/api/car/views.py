@@ -46,7 +46,7 @@ class VehicleSearchAPIView(viewsets.ModelViewSet) :
 
 
 class VehicleAPIView(viewsets.ModelViewSet) :
-    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     serializer_class  =VehicleSerializers
     queryset =Vehicle.objects.all()
     filterset_class = VehicleFilter
@@ -77,7 +77,7 @@ class VehicleReservationsAPIView(viewsets.ModelViewSet):
      queryset           = Reservation.objects.all()
      serializer_class  = VehicleReservationSerializer
 
-     # permission_classes = [IsAccountAdminOrReadOnly]
+     permission_classes = [permissions.IsAuthenticated]
     
      def create(self, request):
          serializer = self.get_serializer(data=request.data)
@@ -103,7 +103,7 @@ class VehicleReservationsAPIView(viewsets.ModelViewSet):
 
 
 class VehiclePastRezervationsAPIView(viewsets.ModelViewSet) :
-    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated]
     serializer_class  =VehiclePastReservationSerializer
     queryset           =Reservation.objects.all()
     filter_backends = [DjangoFilterBackend]
@@ -119,6 +119,7 @@ class VehiclePastRezervationsAPIView(viewsets.ModelViewSet) :
 
 #favoriler clasını oluşturuyorum 
 class FavoriteAPIView(viewsets.ModelViewSet) :
+
      queryset           = Favorite.objects.all()
      serializer_class  = FavoriteSerializer
 

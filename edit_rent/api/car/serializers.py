@@ -5,11 +5,11 @@ from PIL import Image
 
 class VehicleSerializers(serializers.ModelSerializer):
     category = serializers.ChoiceField(choices=VEHICLE_SELECTION)
-    favorites = serializers.SerializerMethodField()
+
 
     class Meta:
         model  =Vehicle
-        fields    =('id','vehicle_owner','model','vehicle_location','category','seating_capacity','rent_per_day','availability','about','favorites','arac_foto_1','arac_foto_2','arac_foto_3')
+        fields    =('id','vehicle_owner','model','vehicle_location','category','seating_capacity','rent_per_day','availability','about','arac_foto_1','arac_foto_2','arac_foto_3')
 
 class VehicleReservationSerializer(serializers.ModelSerializer):
     class Meta:
